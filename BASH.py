@@ -6,14 +6,14 @@ pygame.init()
 
 
 # this part is for GAME SETTINGS
-
 WIDTH = 800
 HEIGHT = 600
 
-screen = pygame.set_mode((WIDTH,HEIGHT))
+screen = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("Meteor Survival")
 
-clock = pygame.time.clock()
+clock = pygame.time.Clock()
+
 
 
 #color
@@ -25,8 +25,10 @@ YELLOW = (255,220,100)
 GREEN = (50, 220, 100)
 
 
+
 font = pygame.font.Font("Poppins-SemiBold.ttf", 36)
-big_font = pygame.font.Font("Poppins-bold.ttf", 70)
+big_font = pygame.font.Font("Poppins-Bold.ttf", 70)
+
 
 
 
@@ -35,15 +37,17 @@ big_font = pygame.font.Font("Poppins-bold.ttf", 70)
 
 
 def draw_player():
+
     pygame.draw.rect(
         screen,
         BLUE,
         (player_x, player_y, player_width, player_height)
+
     )
 
 def create_meteor():
-    x = random.randiant(0, WIDTH - 30)
-    y = random.randiant(-300, -30)
+    x = random.randint(0, WIDTH - 30)
+    y = random.randint(-300, -30)
 
 
     meteors.append([x,y])
@@ -54,7 +58,8 @@ def create_bullet():
     bullets.append([player_x + player_width // 2, player_y])
 
 
-def check_colliderect(rect2):
+
+def check_collision(rect1, rect2):
     return rect1.colliderect(rect2)
 
 
@@ -75,9 +80,9 @@ player_speed = 6
 
 
 meteors = []
-bulllets = []
+bullets = []
 
-meteor_speed = 4
+meter_speed = 4
 bullets_speed= 8
 
 score = 0
@@ -92,9 +97,8 @@ game_over = False
 for i in range(5):
     create_meteor()
 
-
-
 # letsss goooo
+
 # main game gganggggggggg
 
 
@@ -108,10 +112,12 @@ while running:
             running = False
 
 
-        if event.key == pygame.keydown:
 
-            if event.type == pygame.K_SPACE:
+        if event.type == pygame.KEYDOWN:
+
+            if event.key == pygame.K_SPACE:
                 create_bullet()
+
 
 
             if event.key == pygame.K_r and game_over:
@@ -128,80 +134,88 @@ while running:
                     create_meteor()
 
 
-#ayooo
-#----------------GAME IS HERE !!!!!!!!----------------------
+    #ayooo
+    #----------------GAME IS HERE !!!!!!!!----------------------
 
-if game_over == False:
-
-
-    # let player move
-
-    keys = pygame.key.get_pressed()
-
-    if keys[pygame.K_LEFT]:
-        player_x -= player_speed
-
-    if keys[pygame.K_RIGHT]:
-        player_x += player_speed
+    if game_over == False:
 
 
-    # lets lock innnnn
-    if player_x < 0:
-        palyer_x = 0
+        # let player move
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_LEFT]:
+            player_x -= player_speed
+
+        if keys[pygame.K_RIGHT]:
+            player_x += player_speed
 
 
-    if player_x > WIDTH - player_width:
-        player_x = WIDTH - player_width
+        # lets lock innnnn
+        if player_x < 0:
+            player_x = 0
 
 
-
-    # lets meteorrrrrrrr!!!!!!!
-    for meteor in meteors:
-
-        meteor[1] += meteor_speed
+        if player_x > WIDTH - player_width:
+            player_x = WIDTH - player_width
 
 
-        #meteor reached botttom
-        if meteor[1] > HEIGHT:
+        # lets meteorrrrrrrr!!!!!!!
+        for meteor in meteors:
 
-            meteor[0] = random.randint(0, WIDTH - 30)
-            meteor[1] = random.randint(-200, -300)
-
-        meteor_rect = pygame.rect(
-            meteor[0],
-            meteor[1],
-            30,
-            30
-        )
+            meteor[1] += meteor_speed
 
 
-        player_rect = pygame.pect(
-            player_x,
-            player_y,
-            player_width,
-            player_height
-        )
+            #meteor reached botttom
+            if meteor[1] > HEIGHT:
+
+                meteor[0] = random.randint(0, WIDTH - 30)
+                meteor[1] = random.randint(-300, -30)
+
+            meteor_rect = pygame.Rect(
+
+                meteor[0],
+                meteor[1],
+
+                30,
+                30
+            )
 
 
 
-        #collision part
-        if check_collision(player_rect, meteor_rect):
+            player_rect = pygame.Rect(
 
-            lives -= 1
+                player_x,
+                player_y,
 
-            meteor[0] = random.randint(0, WIDTH - 30)
-            meteor[1] = random.randint(-200, -30)
-
-
-            if lives <= 0:
-                game_over = True
+                player_width,
+                player_height
+            )
 
 
 
-#-------------------------------------------------------------------------------------------------
-#----------------------------------BULLETS!!!!!!!!!!!!!!!!!!!-------------------------------------
-#-------------------------------------------------------------------------------------------------
 
+
+            #collision part------------------I literally didnt knew the meaninng og it
+        
+
+            if check_collision(player_rect, meteor_rect):
+
+                lives -= 1
+
+                meteor[0] = random.randint(0, WIDTH - 30)
+                meteor[1] = random.randint(-200, -30)
+
+
+
+                if lives <= 0:
+                    game_over = True
+
+
+
+    #-------------------------------------------------------------------------------------------------
+    #----------------------------------BULLETS!!!!!!!!!!!!!!!!!!!-------------------------------------
+    #-------------------------------------------------------------------------------------------------
 
 
 
@@ -209,58 +223,64 @@ if game_over == False:
             bullet[-1] -= bullets_speed
 
 
-#Remove bullet outside screen
+    #Remove bullet outside screen------gang
 
         for bullet in bullets[:]:
 
-            if bullet[1] <0:
-            bullets.remove(bullet)
+            if bullet[1] < 0:
+                bullets.remove(bullet)
 
 
-#--------------------------------------------------------------
-#-----------------------now bullet+meteor----------------------
-#--------------------------------------------------------------
+
+    #--------------------------------------------------------------
+    #-----------------------now bullet+meteor----------------------
+    #--------------------------------------------------------------
+
 
 
         for bullet in bullets[:]:
 
             bullet_rect = pygame.Rect(
+
                 bullet[0],
                 bullet[1],
                 5,
                 15
+
             )
 
             for meteor in meteors[:]:
 
                 meteor_rect = pygame.Rect(
-                            meteor[0],
-                            meteor[1],
-                            30,
-                            30
-                        )
-                        if check_collisition(bullet_rect, meteor_rect):
+                    meteor[0],
+                    meteor[1],
+                    30,
+                    30
+                )
 
-                            if bullet in bullets
-                                bullet.remove(bullet)
+                if check_collision(bullet_rect, meteor_rect):
 
-                            meteor[0] = random.randint(0, WIDTH - 30)
-                            meteor[1] = random.radint(-200, -30)
+                    if bullet in bullets:
+                        bullets.remove(bullet)
 
-                            score +=10
+                    meteor[0] = random.randint(0, WIDTH - 30)
+                    meteor[1] = random.randint(-200, -30)
+                    score += 10
 
-                            break
-        #------------------------
-        # -----difficulty--------
-        # -----------------------
+                    break
+
+        #------------------------*
+
+        # -----difficulty--------no difficulty no man*
+
+        # -----------------------*damn that was something
+
 
 
         if score >= 50:
             meteor_speed = 5
-
         if score >= 100:
             meteor_speed = 6
-
         if score >= 200:
             meteor_speed = 7
 
@@ -270,17 +290,18 @@ if game_over == False:
     # --------------------------
 
 
+
     screen.fill(BLACK) 
 
 
-
     if game_over == False:
-
-        #here is my boy
+        #here is my boy--------------------------------------------------
         draw_player()
 
+
         #meteors
-        for meteor in ranges:
+
+        for meteor in meteors:
 
             pygame.draw.circle(
                 screen,
@@ -290,6 +311,7 @@ if game_over == False:
             )
 
         # BULLETs
+
         for bullet in bullets:
 
             pygame.draw.rect(
@@ -298,7 +320,8 @@ if game_over == False:
                 (bullet[0], bullet[1], 5, 15)
             )
 
-    #score
+    #score--------------whats yours 
+
     score_text = font.render(
         "score: "+ str(score),
         True,
@@ -310,11 +333,59 @@ if game_over == False:
 
 
     #lives
+
     lives_text = font.render(
         "lives: "+ str(lives),
         True,
         GREEN
     )
 
-    screen.blin(lives_text)
-     
+    screen.blit(lives_text, (650, 20))
+
+else:
+
+    # your game over dude---------------------------------------------------------------------------------------------------------hihi
+
+    game_over_text = big_font.render(
+        "HELL NAHH",
+        True,
+        RED
+    )      
+
+    screen.blit(
+        game_over_text,
+        (200, 200)
+    )
+
+    final_score = font.render(
+        "score: " + str(score),
+        True,
+        WHITE
+    )
+
+    screen.blit(
+        final_score,
+        (350, 310)
+    )
+
+    restart_text = font.render(
+        "press R to restart",
+        True,
+        YELLOW
+    )
+
+
+
+    screen.blit(
+            restart_text,
+            (300, 370)
+        )
+
+
+
+    pygame.display.update()
+    clock.tick(60)
+
+
+
+pygame.quit()
