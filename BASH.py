@@ -26,8 +26,8 @@ GREEN = (50, 220, 100)
 
 
 
-font = pygame.font.Font("Poppins-SemiBold.ttf", 36)
-big_font = pygame.font.Font("Poppins-Bold.ttf", 70)
+font = pygame.font.Font(None, 36)
+big_font = pygame.font.Font(None, 70)
 
 
 
@@ -82,7 +82,7 @@ player_speed = 6
 meteors = []
 bullets = []
 
-meter_speed = 4
+meteor_speed = 4
 bullets_speed= 8
 
 score = 0
@@ -342,50 +342,47 @@ while running:
 
     screen.blit(lives_text, (650, 20))
 
-else:
 
-    # your game over dude---------------------------------------------------------------------------------------------------------hihi
+    # your game over dude
+    if game_over:
 
-    game_over_text = big_font.render(
-        "HELL NAHH",
-        True,
-        RED
-    )      
+        game_over_text = big_font.render(
+            "HELL NAHH",
+            True,
+            RED
+        )
 
-    screen.blit(
-        game_over_text,
-        (200, 200)
-    )
+        screen.blit(
+            game_over_text,
+            (200, 200)
+        )
 
-    final_score = font.render(
-        "score: " + str(score),
-        True,
-        WHITE
-    )
+        final_score = font.render(
+            "score: " + str(score),
+            True,
+            WHITE
+        )
 
-    screen.blit(
-        final_score,
-        (350, 310)
-    )
+        screen.blit(
+            final_score,
+            (350, 310)
+        )
 
-    restart_text = font.render(
-        "press R to restart",
-        True,
-        YELLOW
-    )
+        restart_text = font.render(
+            "press R to lose again",
+            True,
+            YELLOW
+        )
 
-
-
-    screen.blit(
+        screen.blit(
             restart_text,
             (300, 370)
         )
 
 
-
+    # these need to run EVERY frame, not just when the loop ends
     pygame.display.update()
     clock.tick(60)
-
 
 
 pygame.quit()
